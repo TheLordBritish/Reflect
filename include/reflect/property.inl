@@ -1,5 +1,5 @@
 /*
-* Meta Library
+* Reflect Library
 * 2017 - Benjamin Carter (bencarterdev@outlook.com)
 *
 * This software is provided 'as-is', without any express or implied warranty.
@@ -184,6 +184,28 @@ namespace reflect
     bool property_impl<Class, T>::can_get_const_ref() const
     {
         return m_has_member || m_ref_getter;
+    }
+
+    /**********************************************************/
+    template <typename Class, typename T>
+    bool property_impl<Class, T>::is_enum() const
+    {
+        return std::is_enum<T>::value;
+    }
+
+    //====================
+    // Methods
+    //====================
+    /**********************************************************/
+    template <typename Class, typename T>
+    enum_property_impl<Class, T> property_impl<Class, T>::as_enum() const
+    {
+        if (!this->is_enum())
+        {
+            throw detail::meta_exception("Property is not registered to an enumerated type.");
+        }
+
+        return static_cast<enum_property_impl<Class, T>&>(*this);
     }
 
     //====================

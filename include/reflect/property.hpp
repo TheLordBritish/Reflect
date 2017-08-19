@@ -26,10 +26,15 @@
 //====================
 // C++ includes
 //====================
-#include <string> // Represents the name of the property.
+#include <string>        // Represents the name of the property.
+#include <unordered_map> // Creating a map of enumerated types.
 
 namespace reflect
 {
+    // Forward declare the enum property for conversion purposes.
+    template<typename Class, typename T>
+    class enum_property_impl;
+
     //====================
     // Aliases
     //====================
@@ -58,7 +63,7 @@ namespace reflect
     using get_member_type = typename std::decay_t<Type>::member_type;
 	
     template <typename Class, typename T>
-    class property_impl final
+    class property_impl
 	{
     private:
         //====================
@@ -144,7 +149,7 @@ namespace reflect
         /**
          * @brief Default destructor for the propert_impl object.
          */
-        ~property_impl() = default;
+        virtual ~property_impl() = default;
         
         //====================
         // Getters and setters
@@ -252,6 +257,31 @@ namespace reflect
          * @returns True if a member pointer has been registered.
          */
         bool can_get_const_ref() const;
+
+        /**
+         * @brief Checks if this property is registered with a enumeration.
+         * 
+         * Enumerations can be registered in a special manner when exposing classes to the meta-engine.
+         * This method will check if this property has wrapped a enumerated type.
+         * 
+         * @returns True if the property_impl object is exposing an enumerated type.
+         */
+        bool is_enum() const;
+
+        //====================
+        // Methods
+        //====================
+        /**
+         * @brief Converts the property_impl object into a enum_property_impl object.
+         * 
+         * When the property_impl is cast to the enum property, if the property object is not
+         * registered as an enum, it will throw an exception.
+         * 
+         * @returns A new enum_property_impl object.
+         * 
+         * @throws meta_exception is the property does not use a registered enumerated type.
+         */
+        enum_property_impl<Class, T> as_enum() const;
     };
 
     //====================
@@ -361,7 +391,7 @@ namespace reflect
 } // namespace reflect
 
 //====================
-// Meta includes
+// Reflect includes
 //====================
 #include "property.inl" // Method declarations.
 

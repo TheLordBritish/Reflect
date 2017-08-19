@@ -98,6 +98,12 @@ namespace reflect
 		template <typename T>
 		T get_member(const std::string& name);
 
+		template <typename T, typename = std::enable_if_t<std::is_enum<T>::value>>
+		std::string get_enum_member_as_string(const std::string& name);
+
+		template <typename T, typename = std::enable_if<std::is_enum<T>::value>>
+		void set_enum_member_from_string(const std::string& name, const std::string& value);
+
 		/**
 		 * @brief Checks for the existence of a registered member variable.
 		 *

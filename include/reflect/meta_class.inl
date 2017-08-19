@@ -29,6 +29,7 @@
 // Meta includes
 //====================
 #include "property.hpp"                // Retrieving the name from the property.
+#include "enum_property.hpp"           // Retrieving information on enum properties.
 #include "detail/template_helpers.hpp" // Methods for iterating tuples.
 #include "detail/metadata.hpp"         // Stores the information of each meta_class.
 
@@ -66,6 +67,29 @@ namespace reflect
 		});
 
 		return value;
+	}
+
+	/**********************************************************/
+	template <typename Class>
+	template <typename T, typename>
+	std::string meta_class<Class>::get_enum_member_as_string(const std::string& name)
+	{
+		std::string value;
+		this->for_member<T>(name, [&value, this](const auto& member) {
+			value = member.to_string(member.get(m_object));
+		});
+
+		return value;
+	}
+
+	/**********************************************************/
+	template <typename Class>
+	template <typename T, typename>
+	void meta_class<Class>::set_enum_member_from_string(const std::string& name, const std::string& value)
+	{
+		this->for_member<T>(name, [&value, this](const auto& member) {
+			member.set(m_object, member.from_string(value));
+		});
 	}
 
 	/**********************************************************/

@@ -29,7 +29,7 @@
 TEST_CASE("Check class is registered.", "[reflect]")
 {
 	// Assert.
-	REQUIRE(reflect::is_registered<TestObject>());
+	REQUIRE(reflect::is_registered<test_object>());
 }
 
 /**********************************************************/
@@ -46,56 +46,88 @@ TEST_CASE("Check class is not registered.", "[reflect]")
 TEST_CASE("Checking members exist.", "[reflect]")
 {
 	// Arrange.
-	TestObject object;
-	reflect::meta_class<TestObject> data(object);
+	test_object object;
+	reflect::meta_class<test_object> data(object);
 
+	bool hasMembers = data.has_member("value") && data.has_member("string") && data.has_member("readonly") && data.has_member("colour");
 	// Assert.
-	REQUIRE(data.has_member("value"));
-	REQUIRE(data.has_member("string"));
-	REQUIRE(data.has_member("readonly"));
+	REQUIRE(hasMembers);
 }
 
 /**********************************************************/
 TEST_CASE("Getting variable through meta-class.", "[reflect]")
 {
 	// Arrange.
-	TestObject object;
-	object.setValue(10);
-	object.setString("word");
+	test_object object;
+	object.set_value(10);
+	object.set_string("word");
+	object.set_colour(eColour::BLUE);
 
-	reflect::meta_class<TestObject> data(object);
+	reflect::meta_class<test_object> data(object);
 
 	// Act.
 	int value = data.get_member<int>("value");
 	std::string str = data.get_member<std::string>("string");
+	eColour colour = data.get_member<eColour>("colour");
 
 	// Assert.
-	REQUIRE(value == object.getValue());
-	REQUIRE(str == object.getString());
+	REQUIRE(value == object.get_value());
+	REQUIRE(str == object.get_string());
+	REQUIRE(colour == eColour::BLUE);
+}
+
+/**********************************************************/
+TEST_CASE("Getting enum variable as string through meta-class.", "[reflect]")
+{
+	// Arrange.
+	test_object object;
+	object.set_colour(eColour::GREEN);
+
+	reflect::meta_class<test_object> data(object);
+
+	// Act.
+	std::string colour = data.get_enum_member_as_string<eColour>("colour");
+
+	// Assert.
+	REQUIRE(colour == "Green");
+}
+
+/**********************************************************/
+TEST_CASE("Setting enum variable with a string through meta-class.", "[relfect]")
+{
+	// Arrange.
+	test_object object;
+	reflect::meta_class<test_object> data(object);
+
+	// Act.
+	data.set_enum_member_from_string<eColour>("colour", "Blue");
+
+	// Assert.
+	REQUIRE(object.get_colour() == eColour::BLUE);
 }
 
 /**********************************************************/
 TEST_CASE("Setting variables through meta-class.", "[reflect]")
 {
 	// Arrange.
-	TestObject object;
-	reflect::meta_class<TestObject> data(object);
+	test_object object;
+	reflect::meta_class<test_object> data(object);
 
 	// Act.
 	data.set_member<int>("value", 10);
 	data.set_member<std::string>("string", "word");
 
 	// Assert.
-	REQUIRE(object.getValue() == data.get_member<int>("value"));
-	REQUIRE(object.getString() == data.get_member<std::string>("string"));
+	REQUIRE(object.get_value() == data.get_member<int>("value"));
+	REQUIRE(object.get_string() == data.get_member<std::string>("string"));
 }
 
 /**********************************************************/
 TEST_CASE("Setting variable through meta-class with incorrect data-type.", "[reflect]")
 {
 	// Arrange.
-	TestObject object;
-	reflect::meta_class<TestObject> data(object);
+	test_object object;
+	reflect::meta_class<test_object> data(object);
 
 	// Assert.
 	REQUIRE_THROWS_AS(data.set_member<float>("value", 1.0f), reflect::detail::meta_exception);
@@ -105,8 +137,8 @@ TEST_CASE("Setting variable through meta-class with incorrect data-type.", "[ref
 TEST_CASE("Setting value on readonly variable.", "[reflect]")
 {
     // Arrange.
-    TestObject object;
-    reflect::meta_class<TestObject> data(object);
+    test_object object;
+    reflect::meta_class<test_object> data(object);
 
     // Assert.
 	REQUIRE_THROWS_AS(data.set_member<float>("readonly", 1.0f), reflect::detail::meta_exception);

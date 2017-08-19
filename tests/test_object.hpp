@@ -26,35 +26,50 @@
 #include <string>
 #include <reflect/reflect.hpp>
 
-class TestObject final
+enum class eColour
+{
+	RED,
+	GREEN,
+	BLUE
+};
+
+class test_object final
 {
 private:
 	int         m_value;
 	std::string m_string;
 	float       m_readonly;
+	eColour     m_colour;
 
 public:
-	explicit TestObject() : m_value(0), m_string(), m_readonly(0.0f) {}
-	~TestObject() = default;
+	explicit test_object() : m_value(0), m_string(), m_readonly(0.0f), m_colour(eColour::RED) {}
+	~test_object() = default;
 
-	int getValue() const { return m_value; }
-	void setValue(int value) { m_value = value;  }
+	int get_value() const { return m_value; }
+	void set_value(int value) { m_value = value;  }
 
-	const std::string& getString() const { return m_string; }
-	void setString(const std::string& str) { m_string = str; }
+	const std::string& get_string() const { return m_string; }
+	void set_string(const std::string& str) { m_string = str; }
 
-	float getReadonly() const { return m_readonly; }
+	float get_readonly() const { return m_readonly; }
+
+	eColour get_colour() const { return m_colour; }
+	void set_colour(const eColour& colour) { m_colour = colour; }
 };
 
 namespace reflect
 {
 	template <>
-	inline auto register_class<TestObject>()
+	inline auto register_class<test_object>()
 	{
 		return properties(
-			property("value", &TestObject::getValue, &TestObject::setValue),
-			property("string", &TestObject::getString, &TestObject::setString),
-			property("readonly", &TestObject::getReadonly)
+			property("value", &test_object::get_value, &test_object::set_value),
+			property("string", &test_object::get_string, &test_object::set_string),
+			property("readonly", &test_object::get_readonly),
+			enum_property("colour", &test_object::get_colour, &test_object::set_colour)
+				.set_value("Red", eColour::RED)
+				.set_value("Green", eColour::GREEN)
+				.set_value("Blue", eColour::BLUE)
 		);
 	}
 }

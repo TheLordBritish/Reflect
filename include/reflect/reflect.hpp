@@ -26,7 +26,8 @@
 //====================
 // Reflect includes
 //====================
-#include "property.hpp"   // Creating properties.
-#include "meta_class.hpp" // Manipulating meta-data.
+#include "property.hpp"      // Creating properties.
+#include "enum_property.hpp" // Creating enumerated properties.
+#include "meta_class.hpp"    // Manipulating meta-data.
 
 #endif//_REFLECT_HPP_

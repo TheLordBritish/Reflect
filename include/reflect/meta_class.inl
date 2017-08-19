@@ -35,161 +35,161 @@
 
 namespace reflect
 {
-	//====================
-	// Ctors and dtor
-	//====================
-	/**********************************************************/
-	template <typename Class>
-	meta_class<Class>::meta_class(Class& object)
-		: m_object(object)
-	{
-		// Empty.
-	}
+    //====================
+    // Ctors and dtor
+    //====================
+    /**********************************************************/
+    template <typename Class>
+    meta_class<Class>::meta_class(Class& object)
+        : m_object(object)
+    {
+        // Empty.
+    }
 
-	//====================
-	// Getters and setters
-	//====================
-	/**********************************************************/
-	template <typename Class>
-	constexpr std::string meta_class<Class>::get_name() const
-	{
-		return detail::metadata_t<Class, decltype(register_class<Class>())>::name();
-	}
+    //====================
+    // Getters and setters
+    //====================
+    /**********************************************************/
+    template <typename Class>
+    constexpr std::string meta_class<Class>::get_name() const
+    {
+        return detail::metadata_t<Class, decltype(register_class<Class>())>::name();
+    }
 
-	/**********************************************************/
-	template <typename Class>
-	template <typename T>
-	T meta_class<Class>::get_member(const std::string& name)
-	{
-		T value;
-		this->for_member<T>(name, [&value, this](const auto& member) {
-			value = member.get(m_object);
-		});
+    /**********************************************************/
+    template <typename Class>
+    template <typename T>
+    T meta_class<Class>::get_member(const std::string& name)
+    {
+        T value;
+        this->for_member<T>(name, [&value, this](const auto& member) {
+            value = member.get(m_object);
+        });
 
-		return value;
-	}
+        return value;
+    }
 
-	/**********************************************************/
-	template <typename Class>
-	template <typename T, typename>
-	std::string meta_class<Class>::get_enum_member_as_string(const std::string& name)
-	{
-		std::string value;
-		this->for_member<T>(name, [&value, this](const auto& member) {
-			value = member.to_string(member.get(m_object));
-		});
+    /**********************************************************/
+    template <typename Class>
+    template <typename T, typename>
+    std::string meta_class<Class>::get_enum_member_as_string(const std::string& name)
+    {
+        std::string value;
+        this->for_member<T>(name, [&value, this](const auto& member) {
+            value = member.to_string(member.get(m_object));
+        });
 
-		return value;
-	}
+        return value;
+    }
 
-	/**********************************************************/
-	template <typename Class>
-	template <typename T, typename>
-	void meta_class<Class>::set_enum_member_from_string(const std::string& name, const std::string& value)
-	{
-		this->for_member<T>(name, [&value, this](const auto& member) {
-			member.set(m_object, member.from_string(value));
-		});
-	}
+    /**********************************************************/
+    template <typename Class>
+    template <typename T, typename>
+    void meta_class<Class>::set_enum_member_from_string(const std::string& name, const std::string& value)
+    {
+        this->for_member<T>(name, [&value, this](const auto& member) {
+            member.set(m_object, member.from_string(value));
+        });
+    }
 
-	/**********************************************************/
-	template <typename Class>
-	bool meta_class<Class>::has_member(const std::string& name)
-	{
-		bool result = false;
-		this->for_each([&result, name, this](const auto& member) {
-			if (member.get_name() == name) {
-				result = true;
-			}
-		});
+    /**********************************************************/
+    template <typename Class>
+    bool meta_class<Class>::has_member(const std::string& name)
+    {
+        bool result = false;
+        this->for_each([&result, name, this](const auto& member) {
+            if (member.get_name() == name) {
+                result = true;
+            }
+        });
 
-		return result;
-	}
+        return result;
+    }
 
-	/**********************************************************/
-	template <typename Class>
-	template <typename T, typename V, typename>
-	void meta_class<Class>::set_member(const std::string& name, V&& value)
-	{
-		this->for_member<T>(name, [this, value = std::forward<V>(value)](const auto& member) {
-			member.set(m_object, value);
-		});
-	}
+    /**********************************************************/
+    template <typename Class>
+    template <typename T, typename V, typename>
+    void meta_class<Class>::set_member(const std::string& name, V&& value)
+    {
+        this->for_member<T>(name, [this, value = std::forward<V>(value)](const auto& member) {
+            member.set(m_object, value);
+        });
+    }
 
-	//====================
-	// Methods
-	//====================
-	/**********************************************************/
-	template <typename Class>
-	template <typename F, typename>
-	void meta_class<Class>::for_each(F&& f)
-	{
-		detail::for_tuple(std::forward<F>(f), get_members<Class>());
-	}
+    //====================
+    // Methods
+    //====================
+    /**********************************************************/
+    template <typename Class>
+    template <typename F, typename>
+    void meta_class<Class>::for_each(F&& f)
+    {
+        detail::for_tuple(std::forward<F>(f), get_members<Class>());
+    }
 
-	/**********************************************************/
-	template <typename Class>
-	template <typename F, typename, typename>
-	void meta_class<Class>::for_each(F&& f)
-	{
-		// Empty.
-	}
+    /**********************************************************/
+    template <typename Class>
+    template <typename F, typename, typename>
+    void meta_class<Class>::for_each(F&& f)
+    {
+        // Empty.
+    }
 
-	/**********************************************************/
-	template <typename Class>
-	template <typename T, typename F>
-	void meta_class<Class>::for_member(const std::string& name, F&& f)
-	{
-		this->for_each([&](const auto& member) {
-			if (name == member.get_name()) 
-			{
-				if (!std::is_same<get_member_type<decltype(member)>, T>::value)
-				{
-					std::string err = std::string("Member variable: ") + name + std::string("does not match the supplied datatype.");
-					throw detail::meta_exception(err);
-				}
+    /**********************************************************/
+    template <typename Class>
+    template <typename T, typename F>
+    void meta_class<Class>::for_member(const std::string& name, F&& f)
+    {
+        this->for_each([&](const auto& member) {
+            if (name == member.get_name()) 
+            {
+                if (!std::is_same<get_member_type<decltype(member)>, T>::value)
+                {
+                    std::string err = std::string("Member variable: ") + name + std::string("does not match the supplied datatype.");
+                    throw detail::meta_exception(err);
+                }
 
-				detail::call_if<std::is_same<get_member_type<decltype(member)>, T>::value>(std::forward<F>(f), member);
-			}
-		});
-	}
+                detail::call_if<std::is_same<get_member_type<decltype(member)>, T>::value>(std::forward<F>(f), member);
+            }
+        });
+    }
 
-	//====================
-	// Functions
-	//====================
-	/**********************************************************/
-	template <typename... Args>
-	auto properties(Args&&... args)
-	{
-		return std::make_tuple(std::forward<Args>(args)...);
-	}
+    //====================
+    // Functions
+    //====================
+    /**********************************************************/
+    template <typename... Args>
+    auto properties(Args&&... args)
+    {
+        return std::make_tuple(std::forward<Args>(args)...);
+    }
 
-	/**********************************************************/
-	template <typename Class>
-	inline auto register_class()
-	{
-		return std::make_tuple();
-	}
+    /**********************************************************/
+    template <typename Class>
+    inline auto register_class()
+    {
+        return std::make_tuple();
+    }
 
-	/**********************************************************/
-	template <typename Class>
-	constexpr std::string register_name()
-	{
-		return std::string();
-	}
+    /**********************************************************/
+    template <typename Class>
+    constexpr std::string register_name()
+    {
+        return std::string();
+    }
 
-	/**********************************************************/
-	template <typename Class>
-	constexpr bool is_registered()
-	{
-		return !std::is_same<std::tuple<>, decltype(register_class<Class>())>::value;
-	}
+    /**********************************************************/
+    template <typename Class>
+    constexpr bool is_registered()
+    {
+        return !std::is_same<std::tuple<>, decltype(register_class<Class>())>::value;
+    }
 
-	/**********************************************************/
-	template <typename Class>
-	const auto& get_members()
-	{
-		return detail::metadata_t<Class, decltype(register_class<Class>())>::members;
-	}
+    /**********************************************************/
+    template <typename Class>
+    const auto& get_members()
+    {
+        return detail::metadata_t<Class, decltype(register_class<Class>())>::members;
+    }
 
 } // end of namespace reflect

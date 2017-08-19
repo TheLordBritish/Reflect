@@ -73,10 +73,10 @@ namespace reflect
         {
             return (obj.*m_ref_getter)();
         } 
-		else if (m_val_getter)
-		{
-			return (obj.*m_val_getter)();
-		}
+        else if (m_val_getter)
+        {
+            return (obj.*m_val_getter)();
+        }
         else if (m_has_member) 
         {
             return obj.*m_member;
@@ -145,10 +145,10 @@ namespace reflect
         {
             obj.*m_member = value;
         }
-		else
-		{
-			throw detail::meta_exception("Cannot set value: no setters or member pointer set.");
-		}
+        else
+        {
+            throw detail::meta_exception("Cannot set value: no setters or member pointer set.");
+        }
     }
 
     /**********************************************************/
@@ -218,19 +218,19 @@ namespace reflect
         return property_impl<Class, T>(name, member);
     }
 
-	/**********************************************************/
-	template <typename Class, typename T>
-	property_impl<Class, T> property(const std::string& name, ref_getter_func_ptr<Class, T> getter)
-	{
-		return property_impl<Class, T>(name, getter, ref_setter_func_ptr<Class, T>(nullptr));
-	}
+    /**********************************************************/
+    template <typename Class, typename T>
+    property_impl<Class, T> property(const std::string& name, ref_getter_func_ptr<Class, T> getter)
+    {
+        return property_impl<Class, T>(name, getter, ref_setter_func_ptr<Class, T>(nullptr));
+    }
 
-	/**********************************************************/
-	template <typename Class, typename T>
-	property_impl<Class, T> property(const std::string& name, val_getter_func_ptr<Class, T> getter)
-	{
-		return property_impl<Class, T>(name, getter, val_setter_func_ptr<Class, T>(nullptr));
-	}
+    /**********************************************************/
+    template <typename Class, typename T>
+    property_impl<Class, T> property(const std::string& name, val_getter_func_ptr<Class, T> getter)
+    {
+        return property_impl<Class, T>(name, getter, val_setter_func_ptr<Class, T>(nullptr));
+    }
 
     /**********************************************************/
     template <typename Class, typename T>

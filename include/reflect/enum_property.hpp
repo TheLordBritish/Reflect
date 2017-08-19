@@ -38,9 +38,9 @@ namespace reflect
     //====================
     // Structs
     //====================
-	template <typename T>
-	struct enum_property_hash
-	{
+    template <typename T>
+    struct enum_property_hash
+    {
         /**
          * @brief Simple hashing method that will hash enums to a registered string.
          * 
@@ -48,26 +48,26 @@ namespace reflect
          * 
          * @returns The unique hash of the enum.
          */
-		template <typename = std::enable_if_t<std::is_enum<T>::value>>
-		std::size_t operator()(T const& value) const;
-	};
+        template <typename = std::enable_if_t<std::is_enum<T>::value>>
+        std::size_t operator()(T const& value) const;
+    };
 
-	template <typename, typename>
-	class empty_map
-	{
+    template <typename, typename>
+    class empty_map
+    {
         // Empty.
-	};
+    };
 
     //====================
     // Aliases
     //====================
-	/** Alias for a map that uses enums as the key with their mapped string values. */
-	template <typename T>
-	using to_string_map_type = std::unordered_map<T, std::string, enum_property_hash<T>>;
+    /** Alias for a map that uses enums as the key with their mapped string values. */
+    template <typename T>
+    using to_string_map_type = std::unordered_map<T, std::string, enum_property_hash<T>>;
 
-	/** Alias for a map that uses string as the key with their mapped enum values. */
-	template <typename T>
-	using from_string_map_type = std::unordered_map<std::string, T>;
+    /** Alias for a map that uses string as the key with their mapped enum values. */
+    template <typename T>
+    using from_string_map_type = std::unordered_map<std::string, T>;
 
     template <typename Class, typename T>
     class enum_property_impl final : public property_impl<Class, T>
@@ -81,8 +81,8 @@ namespace reflect
          * 
          * @returns An empty map containing no enum property information.
          */
-		template <typename U = T>
-		typename std::enable_if<!std::is_enum<U>::value, empty_map<U, U>>::type to_string_map() const;
+        template <typename U = T>
+        typename std::enable_if<!std::is_enum<U>::value, empty_map<U, U>>::type to_string_map() const;
 
         /**
          * @brief Creates a static map containing information on how enum types are mapped to strings. 
@@ -92,16 +92,16 @@ namespace reflect
          * 
          * @returns The lazily loaded enum to string map.
          */
-		template <typename U = T>
-		typename std::enable_if<std::is_enum<U>::value, to_string_map_type<U>&>::type to_string_map() const;
+        template <typename U = T>
+        typename std::enable_if<std::is_enum<U>::value, to_string_map_type<U>&>::type to_string_map() const;
 
         /**
          * @brief Errorneous method that is invoked if the template argument is not an enumerated type.
          * 
          * @returns An empty map containing no enum property information.
          */
-		template <typename U = T>
-		typename std::enable_if<!std::is_enum<U>::value, empty_map<U, U>>::type from_string_map() const;
+        template <typename U = T>
+        typename std::enable_if<!std::is_enum<U>::value, empty_map<U, U>>::type from_string_map() const;
 
         /**
          * @brief Creates a static map containing information on how strings are mapped to enum types. 
@@ -111,8 +111,8 @@ namespace reflect
          * 
          * @returns The lazily loaded string to enum map.
          */
-		template <typename U = T>
-		typename std::enable_if<std::is_enum<U>::value, from_string_map_type<U>&>::type from_string_map() const;
+        template <typename U = T>
+        typename std::enable_if<std::is_enum<U>::value, from_string_map_type<U>&>::type from_string_map() const;
 
         /**
          * @brief Errorneous method that is invoked if the template argument is not an enumerated type.
@@ -124,8 +124,8 @@ namespace reflect
          * 
          * @throws meta_exception As an incorrect type has been passed to the method.
          */
-		template <typename U = T>
-		typename std::enable_if<!std::is_enum<U>::value, enum_property_impl<Class, T>&>::type set_value(const std::string& name, T value);
+        template <typename U = T>
+        typename std::enable_if<!std::is_enum<U>::value, enum_property_impl<Class, T>&>::type set_value(const std::string& name, T value);
 
     public:
         //====================
@@ -191,8 +191,8 @@ namespace reflect
          */
         ~enum_property_impl() = default;  
 
-		//====================
-		// Methods
+        //====================
+        // Methods
         //====================
         /**
          * @brief Registers a enumerated value with the property.
@@ -207,8 +207,8 @@ namespace reflect
          * 
          * @returns A reference to itself, so that setting values can be chained.
          */
-		template <typename U = T>
-		typename std::enable_if<std::is_enum<U>::value, enum_property_impl<Class, T>&>::type set_value(const std::string& name, T value);
+        template <typename U = T>
+        typename std::enable_if<std::is_enum<U>::value, enum_property_impl<Class, T>&>::type set_value(const std::string& name, T value);
 
         /**
          * @brief Converts the specified enum value to its mapped string value.
@@ -223,8 +223,8 @@ namespace reflect
          * 
          * @throws out_of_range exception If the enum value has not been registered with the property.
          */
-		template <typename U = T>
-		typename std::enable_if<std::is_enum<U>::value, std::string&>::type to_string(const T value) const;
+        template <typename U = T>
+        typename std::enable_if<std::is_enum<U>::value, std::string&>::type to_string(const T value) const;
 
         /**
          * @brief Errorneous method for retrieving a string from a non enumerated type.
@@ -238,8 +238,8 @@ namespace reflect
          * 
          * @throws meta_exception is the method is invoked. 
          */
-		template <typename U = T>
-		typename std::enable_if<!std::is_enum<U>::value, std::string&>::type to_string(const T value) const;
+        template <typename U = T>
+        typename std::enable_if<!std::is_enum<U>::value, std::string&>::type to_string(const T value) const;
         
         /**
          * @brief Converts the specified string to its mapped enum value.
@@ -254,8 +254,8 @@ namespace reflect
          * 
          * @throws out_of_range exception If the string value has not been registered with the property.
          */
-		template <typename U = T>
-		typename std::enable_if<std::is_enum<U>::value, U>::type from_string(const std::string& name) const;
+        template <typename U = T>
+        typename std::enable_if<std::is_enum<U>::value, U>::type from_string(const std::string& name) const;
 
         /**
          * @brief Errorneous method for retrieving a enum from a non registered data-type.
@@ -269,8 +269,8 @@ namespace reflect
          * 
          * @throws meta_exception is the method is invoked. 
          */
-		template <typename U = T>
-		typename std::enable_if<!std::is_enum<U>::value, U>::type from_string(const std::string& name) const;
+        template <typename U = T>
+        typename std::enable_if<!std::is_enum<U>::value, U>::type from_string(const std::string& name) const;
     };
 
     //====================
@@ -291,43 +291,43 @@ namespace reflect
     template <typename Class, typename T, typename = std::enable_if_t<std::is_enum<T>::value>>
     enum_property_impl<Class, T> enum_property(const std::string& name, member_ptr<Class, T> member);
 
-	/**
-	* @brief Convenience method for creating a new enum_property_impl object with reference getter.
-	*
-	* These functions are used to quickly bind properties on a class, without having to insert the template
-	* types when creating enum_property_impl objects. They should only be invoked when registering a new class to the
-	* meta-engine. This property is only declared as readonly, attempting to set the value will result in an 
-	* exception being thrown.
-	*
-	* @param name   The name of the property when serialized.
-	* @param getter The getter method functor which returns an object by reference.
-	* @param setter The setter method functor which takes an object by reference for an argument.
-	*
-	* @returns A new enum_property_impl object with a bound referenced getter and setter functors.
-	*
-	* @throws runtime_error If the property is attempting to set the value.
-	*/
-	template <typename Class, typename T, typename = std::enable_if_t<std::is_enum<T>::value>>
-	enum_property_impl<Class, T> enum_property(const std::string& name, ref_getter_func_ptr<Class, T> getter);
+    /**
+    * @brief Convenience method for creating a new enum_property_impl object with reference getter.
+    *
+    * These functions are used to quickly bind properties on a class, without having to insert the template
+    * types when creating enum_property_impl objects. They should only be invoked when registering a new class to the
+    * meta-engine. This property is only declared as readonly, attempting to set the value will result in an 
+    * exception being thrown.
+    *
+    * @param name   The name of the property when serialized.
+    * @param getter The getter method functor which returns an object by reference.
+    * @param setter The setter method functor which takes an object by reference for an argument.
+    *
+    * @returns A new enum_property_impl object with a bound referenced getter and setter functors.
+    *
+    * @throws runtime_error If the property is attempting to set the value.
+    */
+    template <typename Class, typename T, typename = std::enable_if_t<std::is_enum<T>::value>>
+    enum_property_impl<Class, T> enum_property(const std::string& name, ref_getter_func_ptr<Class, T> getter);
 
-	/**
-	* @brief Convenience method for creating a new enum_property_impl object with by value getter.
-	*
-	* These functions are used to quickly bind properties on a class, without having to insert the template
-	* types when creating enum_property_impl objects. They should only be invoked when registering a new class to the
-	* meta-engine. This property is only declared as readonly, attempting to set the value will result in an 
-	* exception being thrown.
-	*
-	* @param name   The name of the property when serialized.
-	* @param getter The getter method functor which returns an object by value.
-	* @param setter The setter method functor which takes an object by value for an argument.
-	*
-	* @returns A new enum_property_impl object with a bound value based getter and setter functors.
-	*
-	* @throws runtime_error If the property is attempting to set the value.
-	*/
-	template <typename Class, typename T, typename = std::enable_if_t<std::is_enum<T>::value>>
-	enum_property_impl<Class, T> enum_property(const std::string& name, val_getter_func_ptr<Class, T> getter);
+    /**
+    * @brief Convenience method for creating a new enum_property_impl object with by value getter.
+    *
+    * These functions are used to quickly bind properties on a class, without having to insert the template
+    * types when creating enum_property_impl objects. They should only be invoked when registering a new class to the
+    * meta-engine. This property is only declared as readonly, attempting to set the value will result in an 
+    * exception being thrown.
+    *
+    * @param name   The name of the property when serialized.
+    * @param getter The getter method functor which returns an object by value.
+    * @param setter The setter method functor which takes an object by value for an argument.
+    *
+    * @returns A new enum_property_impl object with a bound value based getter and setter functors.
+    *
+    * @throws runtime_error If the property is attempting to set the value.
+    */
+    template <typename Class, typename T, typename = std::enable_if_t<std::is_enum<T>::value>>
+    enum_property_impl<Class, T> enum_property(const std::string& name, val_getter_func_ptr<Class, T> getter);
 
     /**
      * @brief Convenience method for creating a new enum_property_impl object with reference getters and setters.
@@ -343,7 +343,7 @@ namespace reflect
      * @returns A new enum_property_impl object with a bound referenced getter and setter functors.
      */
     template <typename Class, typename T, typename = std::enable_if_t<std::is_enum<T>::value>>
-	enum_property_impl<Class, T> enum_property(const std::string& name, ref_getter_func_ptr<Class, T> getter, ref_setter_func_ptr<Class, T> setter);
+    enum_property_impl<Class, T> enum_property(const std::string& name, ref_getter_func_ptr<Class, T> getter, ref_setter_func_ptr<Class, T> setter);
 
     /**
      * @brief Convenience method for creating a new enum_property_impl object with by value getters and setters.
@@ -359,7 +359,7 @@ namespace reflect
      * @returns A new enum_property_impl object with a bound value based getter and setter functors.
      */
     template <typename Class, typename T, typename = std::enable_if_t<std::is_enum<T>::value>>
-	enum_property_impl<Class, T> enum_property(const std::string& name, val_getter_func_ptr<Class, T> getter, val_setter_func_ptr<Class, T> setter);
+    enum_property_impl<Class, T> enum_property(const std::string& name, val_getter_func_ptr<Class, T> getter, val_setter_func_ptr<Class, T> setter);
 
     /**
      * @brief Convenience method for creating a new enum_property_impl object with a value getter and a setter which takes a referenced parameter.

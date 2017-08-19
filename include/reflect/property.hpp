@@ -61,10 +61,10 @@ namespace reflect
     /** Specifies the type of the member variable. */
     template <typename Type>
     using get_member_type = typename std::decay_t<Type>::member_type;
-	
+    
     template <typename Class, typename T>
     class property_impl
-	{
+    {
     private:
         //====================
         // Member variables
@@ -108,7 +108,7 @@ namespace reflect
          * @param name   The name of the property when serialized.
          * @param member The member variable to bind to the property.
          */
-		explicit property_impl(const std::string& name, member_ptr<Class, T> member);
+        explicit property_impl(const std::string& name, member_ptr<Class, T> member);
 
         /**
          * @brief Constructor for creating a new property_impl object with a getter and setter which uses referenced values.
@@ -120,7 +120,7 @@ namespace reflect
          * @param getter The getter function to bind.
          * @param setter The setter function to bind.
          */
-		explicit property_impl(const std::string& name, ref_getter_func_ptr<Class, T> getter, ref_setter_func_ptr<Class, T> setter);
+        explicit property_impl(const std::string& name, ref_getter_func_ptr<Class, T> getter, ref_setter_func_ptr<Class, T> setter);
 
         /**
          * @brief Constructor for creating a new property_impl object with a getter and setter which uses object values.
@@ -132,7 +132,7 @@ namespace reflect
          * @param getter The getter function to bind.
          * @param setter The setter function to bind.
          */
-		explicit property_impl(const std::string& name, val_getter_func_ptr<Class, T> getter, val_setter_func_ptr<Class, T> setter);
+        explicit property_impl(const std::string& name, val_getter_func_ptr<Class, T> getter, val_setter_func_ptr<Class, T> setter);
 
         /**
          * @brief Constructor for creating a new property_impl object with a getter and setter which uses referenced or object values.
@@ -302,43 +302,43 @@ namespace reflect
     template <typename Class, typename T>
     property_impl<Class, T> property(const std::string& name, member_ptr<Class, T> member);
 
-	/**
-	* @brief Convenience method for creating a new property_impl object with reference getter.
-	*
-	* These functions are used to quickly bind properties on a class, without having to insert the template
-	* types when creating property_impl objects. They should only be invoked when registering a new class to the
-	* meta-engine. This property is only declared as readonly, attempting to set the value will result in an 
-	* exception being thrown.
-	*
-	* @param name   The name of the property when serialized.
-	* @param getter The getter method functor which returns an object by reference.
-	* @param setter The setter method functor which takes an object by reference for an argument.
-	*
-	* @returns A new property_impl object with a bound referenced getter and setter functors.
-	*
-	* @throws runtime_error If the property is attempting to set the value.
-	*/
-	template <typename Class, typename T>
-	property_impl<Class, T> property(const std::string& name, ref_getter_func_ptr<Class, T> getter);
+    /**
+    * @brief Convenience method for creating a new property_impl object with reference getter.
+    *
+    * These functions are used to quickly bind properties on a class, without having to insert the template
+    * types when creating property_impl objects. They should only be invoked when registering a new class to the
+    * meta-engine. This property is only declared as readonly, attempting to set the value will result in an 
+    * exception being thrown.
+    *
+    * @param name   The name of the property when serialized.
+    * @param getter The getter method functor which returns an object by reference.
+    * @param setter The setter method functor which takes an object by reference for an argument.
+    *
+    * @returns A new property_impl object with a bound referenced getter and setter functors.
+    *
+    * @throws runtime_error If the property is attempting to set the value.
+    */
+    template <typename Class, typename T>
+    property_impl<Class, T> property(const std::string& name, ref_getter_func_ptr<Class, T> getter);
 
-	/**
-	* @brief Convenience method for creating a new property_impl object with by value getter.
-	*
-	* These functions are used to quickly bind properties on a class, without having to insert the template
-	* types when creating property_impl objects. They should only be invoked when registering a new class to the
-	* meta-engine. This property is only declared as readonly, attempting to set the value will result in an 
-	* exception being thrown.
-	*
-	* @param name   The name of the property when serialized.
-	* @param getter The getter method functor which returns an object by value.
-	* @param setter The setter method functor which takes an object by value for an argument.
-	*
-	* @returns A new property_impl object with a bound value based getter and setter functors.
-	*
-	* @throws runtime_error If the property is attempting to set the value.
-	*/
-	template <typename Class, typename T>
-	property_impl<Class, T> property(const std::string& name, val_getter_func_ptr<Class, T> getter);
+    /**
+    * @brief Convenience method for creating a new property_impl object with by value getter.
+    *
+    * These functions are used to quickly bind properties on a class, without having to insert the template
+    * types when creating property_impl objects. They should only be invoked when registering a new class to the
+    * meta-engine. This property is only declared as readonly, attempting to set the value will result in an 
+    * exception being thrown.
+    *
+    * @param name   The name of the property when serialized.
+    * @param getter The getter method functor which returns an object by value.
+    * @param setter The setter method functor which takes an object by value for an argument.
+    *
+    * @returns A new property_impl object with a bound value based getter and setter functors.
+    *
+    * @throws runtime_error If the property is attempting to set the value.
+    */
+    template <typename Class, typename T>
+    property_impl<Class, T> property(const std::string& name, val_getter_func_ptr<Class, T> getter);
 
     /**
      * @brief Convenience method for creating a new property_impl object with reference getters and setters.
@@ -354,7 +354,7 @@ namespace reflect
      * @returns A new property_impl object with a bound referenced getter and setter functors.
      */
     template <typename Class, typename T>
-	property_impl<Class, T> property(const std::string& name, ref_getter_func_ptr<Class, T> getter, ref_setter_func_ptr<Class, T> setter);
+    property_impl<Class, T> property(const std::string& name, ref_getter_func_ptr<Class, T> getter, ref_setter_func_ptr<Class, T> setter);
 
     /**
      * @brief Convenience method for creating a new property_impl object with by value getters and setters.
@@ -370,7 +370,7 @@ namespace reflect
      * @returns A new property_impl object with a bound value based getter and setter functors.
      */
     template <typename Class, typename T>
-	property_impl<Class, T> property(const std::string& name, val_getter_func_ptr<Class, T> getter, val_setter_func_ptr<Class, T> setter);
+    property_impl<Class, T> property(const std::string& name, val_getter_func_ptr<Class, T> getter, val_setter_func_ptr<Class, T> setter);
 
     /**
      * @brief Convenience method for creating a new property_impl object with a value getter and a setter which takes a referenced parameter.

@@ -31,39 +31,39 @@
 
 namespace reflect
 {
-	namespace detail
-	{
-		template <typename T, typename Type>
-		struct metadata_t final
-		{
-			//====================
-			// Member variables
-			//====================
-			/** Invoked to register relevant classes to the meta engine. */
-			static Type members;
+    namespace detail
+    {
+        template <typename T, typename Type>
+        struct metadata_t final
+        {
+            //====================
+            // Member variables
+            //====================
+            /** Invoked to register relevant classes to the meta engine. */
+            static Type members;
 
-			//====================
-			// Methods
-			//====================
-			/**
-			 * @brief Retrieves the name of the registered class within the meta engine.
-			 * 
-			 * @returns The registered name.
-			 */
-			static std::string name() 
-			{
-				return register_name<T>();
-			}
-		};
+            //====================
+            // Methods
+            //====================
+            /**
+             * @brief Retrieves the name of the registered class within the meta engine.
+             * 
+             * @returns The registered name.
+             */
+            static std::string name() 
+            {
+                return register_name<T>();
+            }
+        };
 
-		//====================
-		// Methods
-		//====================
-		/**********************************************************/
-		template <typename T, typename Type>
-		Type metadata_t<T, Type>::members = register_class<T>();
+        //====================
+        // Methods
+        //====================
+        /**********************************************************/
+        template <typename T, typename Type>
+        Type metadata_t<T, Type>::members = register_class<T>();
 
-	} // namespace detail
+    } // namespace detail
 } // namespace reflect
 
 #endif//_REFLECT_META_DATA_HPP_

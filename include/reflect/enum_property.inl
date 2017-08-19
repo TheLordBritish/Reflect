@@ -22,30 +22,30 @@
 
 namespace reflect
 {
-	//========================================
-	// enum_property_hash
-	//========================================
-	//====================
-	// Operators
-	//====================
-	/**********************************************************/
-	template <typename T>
-	template <typename>
-	std::size_t enum_property_hash<T>::operator()(T const& value) const
-	{
-		using type = typename std::underlying_type<T>::type;
-		const type val = static_cast<type>(value);
+    //========================================
+    // enum_property_hash
+    //========================================
+    //====================
+    // Operators
+    //====================
+    /**********************************************************/
+    template <typename T>
+    template <typename>
+    std::size_t enum_property_hash<T>::operator()(T const& value) const
+    {
+        using type = typename std::underlying_type<T>::type;
+        const type val = static_cast<type>(value);
 
-		std::hash<type> hash;
-		return hash(val);
-	}
+        std::hash<type> hash;
+        return hash(val);
+    }
 
-	//========================================
-	// enum_property_impl
-	//========================================
-	//====================
-	// Ctors and dtor
-	//====================
+    //========================================
+    // enum_property_impl
+    //========================================
+    //====================
+    // Ctors and dtor
+    //====================
     /**********************************************************/
     template <typename Class, typename T>
     enum_property_impl<Class, T>::enum_property_impl(const std::string& name, member_ptr<Class, T> member)
@@ -78,99 +78,99 @@ namespace reflect
         // Empty.
     }
 
-	//====================
-	// Private methods
-	//====================
-	/**********************************************************/
-	template <typename Class, typename T>
-	template <typename U>
-	typename std::enable_if<!std::is_enum<U>::value, empty_map<U, U>>::type enum_property_impl<Class, T>::to_string_map() const
-	{
-		throw detail::meta_exception("Called to_string_map on a non-enumerated type.");
-	}
+    //====================
+    // Private methods
+    //====================
+    /**********************************************************/
+    template <typename Class, typename T>
+    template <typename U>
+    typename std::enable_if<!std::is_enum<U>::value, empty_map<U, U>>::type enum_property_impl<Class, T>::to_string_map() const
+    {
+        throw detail::meta_exception("Called to_string_map on a non-enumerated type.");
+    }
 
-	/**********************************************************/
-	template <typename Class, typename T>
-	template <typename U>
-	typename std::enable_if<std::is_enum<U>::value, to_string_map_type<U>&>::type enum_property_impl<Class, T>::to_string_map() const
-	{
-		static to_string_map_type<U> map;
-		return map;
-	}
+    /**********************************************************/
+    template <typename Class, typename T>
+    template <typename U>
+    typename std::enable_if<std::is_enum<U>::value, to_string_map_type<U>&>::type enum_property_impl<Class, T>::to_string_map() const
+    {
+        static to_string_map_type<U> map;
+        return map;
+    }
 
-	/**********************************************************/
-	template <typename Class, typename T>
-	template <typename U>
-	typename std::enable_if<!std::is_enum<U>::value, empty_map<U, U>>::type enum_property_impl<Class, T>::from_string_map() const
-	{
-		throw detail::meta_exception("Called from_string_map on a non-enumerated type.");
-	}
+    /**********************************************************/
+    template <typename Class, typename T>
+    template <typename U>
+    typename std::enable_if<!std::is_enum<U>::value, empty_map<U, U>>::type enum_property_impl<Class, T>::from_string_map() const
+    {
+        throw detail::meta_exception("Called from_string_map on a non-enumerated type.");
+    }
 
-	/**********************************************************/
-	template <typename Class, typename T>
-	template <typename U>
-	typename std::enable_if<std::is_enum<U>::value, from_string_map_type<U>&>::type enum_property_impl<Class, T>::from_string_map() const
-	{
-		static from_string_map_type<U> map;
-		return map;
-	}
+    /**********************************************************/
+    template <typename Class, typename T>
+    template <typename U>
+    typename std::enable_if<std::is_enum<U>::value, from_string_map_type<U>&>::type enum_property_impl<Class, T>::from_string_map() const
+    {
+        static from_string_map_type<U> map;
+        return map;
+    }
 
-	/**********************************************************/
-	template <typename Class, typename T>
-	template <typename U>
-	typename std::enable_if<!std::is_enum<U>::value, enum_property_impl<Class, T>&>::type enum_property_impl<Class, T>::set_value(const std::string& name, T value)
-	{
-		throw detail::meta_exception("Called value on a non-enumerated type.");
-	}
+    /**********************************************************/
+    template <typename Class, typename T>
+    template <typename U>
+    typename std::enable_if<!std::is_enum<U>::value, enum_property_impl<Class, T>&>::type enum_property_impl<Class, T>::set_value(const std::string& name, T value)
+    {
+        throw detail::meta_exception("Called value on a non-enumerated type.");
+    }
 
-	//====================
-	// Methods
-	//====================
-	/**********************************************************/
-	template <typename Class, typename T>
-	template <typename U>
-	typename std::enable_if<std::is_enum<U>::value, enum_property_impl<Class, T>&>::type enum_property_impl<Class, T>::set_value(const std::string& name, T value)
-	{
-		auto& to_map = this->to_string_map();
-		auto& from_map = this->from_string_map();
+    //====================
+    // Methods
+    //====================
+    /**********************************************************/
+    template <typename Class, typename T>
+    template <typename U>
+    typename std::enable_if<std::is_enum<U>::value, enum_property_impl<Class, T>&>::type enum_property_impl<Class, T>::set_value(const std::string& name, T value)
+    {
+        auto& to_map = this->to_string_map();
+        auto& from_map = this->from_string_map();
 
-		to_map[value] = name;
-		from_map[name] = value;
+        to_map[value] = name;
+        from_map[name] = value;
 
-		return *this;
-	}
+        return *this;
+    }
 
-	/**********************************************************/
-	template <typename Class, typename T>
-	template <typename U>
-	typename std::enable_if<std::is_enum<U>::value, std::string&>::type enum_property_impl<Class, T>::to_string(const T value) const
-	{
-		return this->to_string_map().at(value);
-	}
+    /**********************************************************/
+    template <typename Class, typename T>
+    template <typename U>
+    typename std::enable_if<std::is_enum<U>::value, std::string&>::type enum_property_impl<Class, T>::to_string(const T value) const
+    {
+        return this->to_string_map().at(value);
+    }
 
-	/**********************************************************/
-	template <typename Class, typename T>
-	template <typename U>
-	typename std::enable_if<!std::is_enum<U>::value, std::string&>::type enum_property_impl<Class, T>::to_string(const T value) const
-	{
-		throw detail::meta_exception("Called to_string on non-enumerated property.");
-	}
+    /**********************************************************/
+    template <typename Class, typename T>
+    template <typename U>
+    typename std::enable_if<!std::is_enum<U>::value, std::string&>::type enum_property_impl<Class, T>::to_string(const T value) const
+    {
+        throw detail::meta_exception("Called to_string on non-enumerated property.");
+    }
 
-	/**********************************************************/
-	template <typename Class, typename T>
-	template <typename U>
-	typename std::enable_if<std::is_enum<U>::value, U>::type enum_property_impl<Class, T>::from_string(const std::string& name) const
-	{
-		return this->from_string_map().at(name);
-	}
+    /**********************************************************/
+    template <typename Class, typename T>
+    template <typename U>
+    typename std::enable_if<std::is_enum<U>::value, U>::type enum_property_impl<Class, T>::from_string(const std::string& name) const
+    {
+        return this->from_string_map().at(name);
+    }
 
-	/**********************************************************/
-	template <typename Class, typename T>
-	template <typename U>
-	typename std::enable_if<!std::is_enum<U>::value, U>::type enum_property_impl<Class, T>::from_string(const std::string& name) const
-	{
-		throw detail::meta_exception("Called from_string on non-enumerated property.");
-	}
+    /**********************************************************/
+    template <typename Class, typename T>
+    template <typename U>
+    typename std::enable_if<!std::is_enum<U>::value, U>::type enum_property_impl<Class, T>::from_string(const std::string& name) const
+    {
+        throw detail::meta_exception("Called from_string on non-enumerated property.");
+    }
 
     //====================
     // Functions
@@ -183,35 +183,35 @@ namespace reflect
     }
 
     /**********************************************************/
-	template <typename Class, typename T, typename>
+    template <typename Class, typename T, typename>
     enum_property_impl<Class, T> enum_property(const std::string& name, ref_getter_func_ptr<Class, T> getter)
     {
         return enum_property_impl<Class, T>(name, getter, ref_setter_func_ptr<Class, T>(nullptr));
     }
 
     /**********************************************************/
-	template <typename Class, typename T, typename>
+    template <typename Class, typename T, typename>
     enum_property_impl<Class, T> enum_property(const std::string& name, val_getter_func_ptr<Class, T> getter)
     {
         return enum_property_impl<Class, T>(name, getter, val_setter_func_ptr<Class, T>(nullptr));
     }
 
     /**********************************************************/
-	template <typename Class, typename T, typename>
+    template <typename Class, typename T, typename>
     enum_property_impl<Class, T> enum_property(const std::string& name, ref_getter_func_ptr<Class, T> getter, ref_setter_func_ptr<Class, T> setter)
     {
         return enum_property_impl<Class, T>(name, getter, setter);
     }
 
     /**********************************************************/
-	template <typename Class, typename T, typename>
+    template <typename Class, typename T, typename>
     enum_property_impl<Class, T> enum_property(const std::string& name, val_getter_func_ptr<Class, T> getter, val_setter_func_ptr<Class, T> setter)
     {
         return enum_property_impl<Class, T>(name, getter, setter);
     }
 
     /**********************************************************/
-	template <typename Class, typename T, typename>
+    template <typename Class, typename T, typename>
     enum_property_impl<Class, T> enum_property(const std::string& name, val_getter_func_ptr<Class, T> getter, ref_setter_func_ptr<Class, T> setter)
     {
         return enum_property_impl<Class, T>(name, getter, setter);

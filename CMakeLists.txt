@@ -45,6 +45,12 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 include_directories("${CMAKE_SOURCE_DIR}/include")
 
 #====================
+# Examples directories
+#====================
+# Add the examples sub-directory.
+add_subdirectory("${CMAKE_SOURCE_DIR}/examples")
+
+#====================
 # Libraries
 #====================
 ########################################

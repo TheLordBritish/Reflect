@@ -205,7 +205,7 @@ namespace reflect
             throw detail::meta_exception("Property is not registered to an enumerated type.");
         }
 
-        return static_cast<enum_property_impl<Class, T>&>(*this);
+        return static_cast<const enum_property_impl<Class, T>&>(*this);
     }
 
     //====================

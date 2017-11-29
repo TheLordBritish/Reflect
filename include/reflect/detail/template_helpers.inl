@@ -42,19 +42,33 @@ namespace reflect
             return f(std::get<I>(std::forward<Tuple>(t))...);
         }
 
+		/**********************************************************/
+		template <size_t N>
+		decltype(auto) make_index_sequence()
+		{
+			return std::make_index_sequence<N>();
+		}
+
+		/**********************************************************/
+		template <>
+		inline decltype(auto) make_index_sequence<1>()
+		{
+			return std::index_sequence<0>();
+		}
+
         /**********************************************************/
         template <typename F, typename Tuple>
         decltype(auto) apply(F&& f, Tuple&& t)
         {
             constexpr size_t size = std::tuple_size<std::decay_t<Tuple>>::value;
-            return apply_impl(std::forward<F>(f), std::forward<Tuple>(t), std::make_index_sequence<size>());
+            return apply_impl(std::forward<F>(f), std::forward<Tuple>(t), make_index_sequence<size>());
         }
 
         /**********************************************************/
         template <typename F, typename T>
         void for_tuple(F&& f, T&& tuple)
         {
-            apply([&f](auto&&... elems) { 
+            reflect::detail::apply([&f](auto&&... elems) { 
                 for_each(f, std::forward<decltype(elems)>(elems)...); 
             }, std::forward<T>(tuple));
         }

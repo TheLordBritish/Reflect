@@ -42,20 +42,20 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 # Include directories
 #====================
 # Reflect library includes
-include_directories("${CMAKE_SOURCE_DIR}/include")
+include_directories("include")
 
 #====================
 # Examples directories
 #====================
 # Add the examples sub-directory.
-add_subdirectory("${CMAKE_SOURCE_DIR}/examples")
+add_subdirectory("examples")
 
 #====================
 # Libraries
 #====================
 ########################################
 # Catch [Unit-testing framework].
-set(CATCH_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/lib/catch/include)
+set(CATCH_INCLUDE_DIR "lib/catch/include")
 # Create the library.
 add_library(catch INTERFACE)
 # Link the catch header files.
@@ -66,8 +66,8 @@ target_include_directories(catch INTERFACE ${CATCH_INCLUDE_DIR})
 #====================
 ########################################
 # Unit test executable.
-set(TEST_HEADER_FILES ${CMAKE_SOURCE_DIR}/tests/test_object.hpp)
-set(TEST_SOURCE_FILES ${CMAKE_SOURCE_DIR}/tests/test_main.cpp)
+set(TEST_HEADER_FILES "tests/test_object.hpp")
+set(TEST_SOURCE_FILES "tests/test_main.cpp")
 # Set the name of the test executable and its source files. 
 add_executable(reflect_test ${TEST_HEADER_FILES} ${TEST_SOURCE_FILES})
 

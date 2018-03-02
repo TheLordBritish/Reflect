@@ -49,15 +49,15 @@ namespace reflect
     /**********************************************************/
     template <typename Class, typename T>
     enum_property_impl<Class, T>::enum_property_impl(const std::string& name, member_ptr<Class, T> member)
-        : property_impl(name, member)
+        : property_impl<Class, T>(name, member)
     {
         // Empty.
-    }    
+    }
 
     /**********************************************************/
     template <typename Class, typename T>
     enum_property_impl<Class, T>::enum_property_impl(const std::string& name, ref_getter_func_ptr<Class, T> getter, ref_setter_func_ptr<Class, T> setter)
-        : property_impl(name, getter, setter)
+        : property_impl<Class, T>(name, getter, setter)
     {
         // Empty.
     }
@@ -65,7 +65,7 @@ namespace reflect
     /**********************************************************/
     template <typename Class, typename T>
     enum_property_impl<Class, T>::enum_property_impl(const std::string& name, val_getter_func_ptr<Class, T> getter, val_setter_func_ptr<Class, T> setter)
-        : property_impl(name, getter, setter)
+        : property_impl<Class, T>(name, getter, setter)
     {
         // Empty.
     }
@@ -73,7 +73,7 @@ namespace reflect
     /**********************************************************/
     template <typename Class, typename T>
     enum_property_impl<Class, T>::enum_property_impl(const std::string& name, val_getter_func_ptr<Class, T> getter, ref_setter_func_ptr<Class, T> setter)
-        : property_impl(name, getter, setter)
+        : property_impl<Class, T>(name, getter, setter)
     {
         // Empty.
     }
